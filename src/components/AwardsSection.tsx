@@ -1,4 +1,5 @@
-import { useScrollReveal } from '@/hooks/useScrollReveal';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 const awards = [
   { name: 'Awwwards Site of the Day', category: 'Excellence', year: '2024' },
@@ -10,56 +11,97 @@ const awards = [
 ];
 
 const AwardsSection = () => {
-  const { ref, isVisible } = useScrollReveal();
+  const headerRef = useRef<HTMLDivElement>(null);
+  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
 
   return (
     <section id="awards" className="section-padding">
       <div className="container-editorial">
         {/* Section header */}
-        <div 
-          ref={ref}
-          className={`mb-12 md:mb-20 transition-all duration-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+        <motion.div 
+          ref={headerRef}
+          className="mb-12 md:mb-20"
         >
-          <span className="text-meta mb-4 block">Recognition</span>
-          <h2 className="heading-section font-semibold text-foreground">
-            Award Highlights
-          </h2>
-        </div>
+          <motion.span 
+            className="text-meta mb-4 block"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+          >
+            Recognition
+          </motion.span>
+          <div className="overflow-hidden">
+            <motion.h2 
+              className="heading-section font-semibold text-foreground"
+              initial={{ y: 100 }}
+              animate={isHeaderInView ? { y: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              Award Highlights
+            </motion.h2>
+          </div>
+        </motion.div>
 
         {/* Awards list */}
         <div className="border-t border-divider">
           {awards.map((award, index) => (
-            <div
-              key={index}
-              className={`border-b border-divider py-5 md:py-6 transition-all duration-700 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: `${index * 80 + 200}ms` }}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-4 items-baseline">
-                <div className="md:col-span-5">
-                  <span className="text-base md:text-lg text-foreground">
-                    {award.name}
-                  </span>
-                </div>
-                <div className="md:col-span-4">
-                  <span className="text-sm text-muted-foreground">
-                    {award.category}
-                  </span>
-                </div>
-                <div className="md:col-span-3 md:text-right">
-                  <span className="text-sm text-muted-foreground">
-                    {award.year}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <AwardRow key={index} award={award} index={index} />
           ))}
         </div>
       </div>
     </section>
+  );
+};
+
+interface AwardRowProps {
+  award: { name: string; category: string; year: string };
+  index: number;
+}
+
+const AwardRow = ({ award, index }: AwardRowProps) => {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(rowRef, { once: true, margin: "-30px" });
+
+  return (
+    <motion.div
+      ref={rowRef}
+      className="border-b border-divider py-5 md:py-6 group cursor-pointer overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.5 }}
+      whileHover={{ backgroundColor: "rgba(255,255,255,0.02)" }}
+    >
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-4 items-baseline"
+        initial={{ y: 40 }}
+        animate={isInView ? { y: 0 } : {}}
+        transition={{ 
+          duration: 0.6, 
+          delay: index * 0.08,
+          ease: [0.25, 0.4, 0.25, 1]
+        }}
+      >
+        <div className="md:col-span-5">
+          <motion.span 
+            className="text-base md:text-lg text-foreground inline-block"
+            whileHover={{ x: 10 }}
+            transition={{ duration: 0.3 }}
+          >
+            {award.name}
+          </motion.span>
+        </div>
+        <div className="md:col-span-4">
+          <span className="text-sm text-muted-foreground">
+            {award.category}
+          </span>
+        </div>
+        <div className="md:col-span-3 md:text-right">
+          <span className="text-sm text-muted-foreground">
+            {award.year}
+          </span>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
