@@ -47,7 +47,7 @@ const Index = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background cursor-none md:cursor-none noise-overlay">
+    <div className="min-h-screen bg-background cursor-none md:cursor-none">
       <CustomCursor />
       <ScrollProgress />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
