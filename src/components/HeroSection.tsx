@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
+import MagneticButton from './MagneticButton';
+
 const socialLinks = [
   { label: 'Tw', href: '#' },
   { label: 'Li', href: '#' },
@@ -107,18 +109,20 @@ const HeroSection = ({ portraitImage }: HeroSectionProps) => {
               {/* Social links */}
               <div className="flex gap-4">
                 {socialLinks.map((link, index) => (
-                  <motion.a
+                  <motion.div
                     key={link.label}
-                    href={link.href}
-                    className="w-10 h-10 flex items-center justify-center text-xs font-medium text-muted-foreground border border-divider rounded-full transition-all duration-300 hover:text-foreground hover:border-foreground"
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={isVisible ? { opacity: 1, scale: 1 } : {}}
                     transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
                   >
-                    {link.label}
-                  </motion.a>
+                    <MagneticButton
+                      href={link.href}
+                      className="w-10 h-10 flex items-center justify-center text-xs font-medium text-muted-foreground border border-divider rounded-full transition-all duration-300 hover:text-foreground hover:border-foreground"
+                      strength={0.4}
+                    >
+                      {link.label}
+                    </MagneticButton>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
