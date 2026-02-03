@@ -7,8 +7,6 @@ import ExperienceSection from '@/components/ExperienceSection';
 import AwardsSection from '@/components/AwardsSection';
 import WorkSection from '@/components/WorkSection';
 import ContactSection from '@/components/ContactSection';
-import CustomCursor from '@/components/CustomCursor';
-import ScrollProgress from '@/components/ScrollProgress';
 
 import portraitImage from '@/assets/portrait.jpg';
 import project1 from '@/assets/project-1.jpg';
@@ -47,9 +45,7 @@ const Index = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background cursor-none md:cursor-none">
-      <CustomCursor />
-      <ScrollProgress />
+    <div className="min-h-screen bg-background">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <MenuOverlay isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       

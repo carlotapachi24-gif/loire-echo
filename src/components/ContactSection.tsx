@@ -1,7 +1,5 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import MagneticButton from './MagneticButton';
-import TextScramble from './TextScramble';
 
 const footerLinks = {
   navigation: [
@@ -66,25 +64,22 @@ const ContactSection = () => {
               your next project.
             </motion.h2>
           </div>
-          <motion.div
+          <motion.a 
+            href="mailto:hello@johnliore.com"
+            className="inline-block text-lg md:text-xl text-foreground relative group"
             initial={{ opacity: 0, y: 20 }}
             animate={isCtaInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
+            whileHover={{ scale: 1.05 }}
           >
-            <MagneticButton
-              href="mailto:hello@johnliore.com"
-              className="inline-block text-lg md:text-xl text-foreground relative group"
-              strength={0.3}
-            >
-              <TextScramble text="Email Me" className="font-normal" />
-              <motion.span 
-                className="absolute bottom-0 left-0 w-full h-px bg-foreground"
-                initial={{ scaleX: 1 }}
-                whileHover={{ scaleX: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </MagneticButton>
-          </motion.div>
+            <span>Email Me</span>
+            <motion.span 
+              className="absolute bottom-0 left-0 w-full h-px bg-foreground"
+              initial={{ scaleX: 1 }}
+              whileHover={{ scaleX: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.a>
         </motion.div>
 
         {/* Footer */}
@@ -191,29 +186,19 @@ const ContactSection = () => {
             </motion.div>
           </div>
 
-          {/* Giant skill words - infinite scroll ticker */}
+          {/* Giant skill words - horizontal scroll */}
           <div className="overflow-hidden py-8 md:py-12 border-t border-divider">
             <motion.div 
               className="flex gap-x-8 md:gap-x-16 whitespace-nowrap"
-              animate={{ x: [0, "-50%"] }}
-              transition={{
-                x: {
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  duration: 20,
-                  ease: "linear",
-                },
-              }}
+              style={{ x: skillsX }}
             >
-              {[...skillWords, ...skillWords, ...skillWords, ...skillWords].map((word, index) => (
+              {[...skillWords, ...skillWords].map((word, index) => (
                 <motion.span 
                   key={index}
-                  className="text-4xl md:text-6xl lg:text-8xl font-semibold text-muted-foreground/15 select-none"
-                  whileHover={{ 
-                    color: "rgba(255,255,255,0.5)",
-                    scale: 1.05,
-                  }}
-                  transition={{ duration: 0.3 }}
+                  className="text-4xl md:text-6xl lg:text-8xl font-semibold text-muted-foreground/15"
+                  initial={{ opacity: 0 }}
+                  animate={isFooterInView ? { opacity: 1 } : {}}
+                  transition={{ duration: 0.6, delay: index * 0.05 }}
                 >
                   {word}
                 </motion.span>

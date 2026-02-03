@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import TiltCard from './TiltCard';
 
 interface Project {
   id: number;
@@ -95,57 +94,50 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       animate={isInView ? { opacity: 1 } : {}}
       transition={{ duration: 0.8, delay: index * 0.1 }}
     >
-      {/* Image container with 3D tilt */}
-      <TiltCard 
-        className="relative aspect-[16/10] mb-6 md:mb-8 bg-secondary"
-        tiltAmount={8}
-        glareEnabled={true}
+      {/* Image container */}
+      <motion.div 
+        className="relative aspect-[16/10] overflow-hidden mb-6 md:mb-8 bg-secondary"
+        initial={{ clipPath: "inset(100% 0 0 0)" }}
+        animate={isInView ? { clipPath: "inset(0% 0 0 0)" } : {}}
+        transition={{ 
+          duration: 1.2, 
+          delay: index * 0.1,
+          ease: [0.25, 0.4, 0.25, 1]
+        }}
       >
-        <motion.div 
-          className="absolute inset-0 overflow-hidden"
-          initial={{ clipPath: "inset(100% 0 0 0)" }}
-          animate={isInView ? { clipPath: "inset(0% 0 0 0)" } : {}}
-          transition={{ 
-            duration: 1.2, 
-            delay: index * 0.1,
-            ease: [0.25, 0.4, 0.25, 1]
-          }}
-          data-cursor="View"
+        <motion.div
+          className="absolute inset-0"
+          style={{ y: imageY, scale: imageScale }}
         >
-          <motion.div
-            className="absolute inset-0"
-            style={{ y: imageY, scale: imageScale }}
-          >
-            <motion.img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
-            />
-          </motion.div>
-          
-          {/* Overlay on hover */}
-          <motion.div 
-            className="absolute inset-0 bg-background/20"
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
+          <motion.img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
           />
-
-          {/* Project number */}
-          <motion.div
-            className="absolute bottom-4 right-4 md:bottom-6 md:right-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: index * 0.1 + 0.6 }}
-          >
-            <span className="text-xs text-foreground/60 font-medium">
-              0{index + 1}
-            </span>
-          </motion.div>
         </motion.div>
-      </TiltCard>
+        
+        {/* Overlay on hover */}
+        <motion.div 
+          className="absolute inset-0 bg-background/20"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+        />
+
+        {/* Project number */}
+        <motion.div
+          className="absolute bottom-4 right-4 md:bottom-6 md:right-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: index * 0.1 + 0.6 }}
+        >
+          <span className="text-xs text-foreground/60 font-medium">
+            0{index + 1}
+          </span>
+        </motion.div>
+      </motion.div>
 
       {/* Project info */}
       <motion.div 
